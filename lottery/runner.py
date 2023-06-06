@@ -95,11 +95,14 @@ class LotteryRunner(Runner):
             pretrain_loc = self.desc.run_path(self.replicate, 'pretrain')
             old = models.registry.load(pretrain_loc, self.desc.pretrain_end_step,
                                        self.desc.model_hparams, self.desc.pretrain_outputs)
-            state_dict = {k: v for k, v in old.state_dict().items()}
+            state_dict = dict(old.state_dict().items())
 
             # Select a new output layer if number of classes differs.
             if self.desc.train_outputs != self.desc.pretrain_outputs:
-                state_dict.update({k: new_model.state_dict()[k] for k in new_model.output_layer_names})
+                state_dict |= {
+                    k: new_model.state_dict()[k]
+                    for k in new_model.output_layer_names
+                }
 
             new_model.load_state_dict(state_dict)
 
@@ -114,7 +117,7 @@ class LotteryRunner(Runner):
         pruned_model = PrunedModel(model, Mask.load(location))
         pruned_model.save(location, self.desc.train_start_step)
         if self.verbose and get_platform().is_primary_process:
-            print('-'*82 + '\nPruning Level {}\n'.format(level) + '-'*82)
+            print('-'*82 + f'\nPruning Level {level}\n' + '-'*82)
         train.standard_train(pruned_model, location, self.desc.dataset_hparams, self.desc.training_hparams,
                              start_step=self.desc.train_start_step, verbose=self.verbose,
                              evaluate_every_epoch=self.evaluate_every_epoch)

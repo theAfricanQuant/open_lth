@@ -97,7 +97,9 @@ class TestPrunedModel(test_case.TestCase):
         pruned_model = PrunedModel(self.model, mask)
 
         state_dict = pruned_model.state_dict()
-        self.assertEqual(set(['model.layer.weight', 'mask_layer___weight']), state_dict.keys())
+        self.assertEqual(
+            {'model.layer.weight', 'mask_layer___weight'}, state_dict.keys()
+        )
 
     def test_load_state_dict(self):
         mask = Mask.ones_like(self.model)

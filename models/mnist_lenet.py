@@ -43,9 +43,11 @@ class Model(base.Model):
 
     @staticmethod
     def is_valid_model_name(model_name):
-        return (model_name.startswith('mnist_lenet') and
-                len(model_name.split('_')) > 2 and
-                all([x.isdigit() and int(x) > 0 for x in model_name.split('_')[2:]]))
+        return (
+            model_name.startswith('mnist_lenet')
+            and len(model_name.split('_')) > 2
+            and all(x.isdigit() and int(x) > 0 for x in model_name.split('_')[2:])
+        )
 
     @staticmethod
     def get_model_from_name(model_name, initializer, outputs=None):
@@ -59,7 +61,7 @@ class Model(base.Model):
         outputs = outputs or 10
 
         if not Model.is_valid_model_name(model_name):
-            raise ValueError('Invalid model name: {}'.format(model_name))
+            raise ValueError(f'Invalid model name: {model_name}')
 
         plan = [int(n) for n in model_name.split('_')[2:]]
         return Model(plan, initializer, outputs)

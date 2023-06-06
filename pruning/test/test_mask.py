@@ -25,7 +25,7 @@ class TestMask(test_case.TestCase):
         self.assertEqual(len(m), 2)
         self.assertEqual(len(m.keys()), 2)
         self.assertEqual(len(m.values()), 2)
-        self.assertEqual(set(m.keys()), set(['hello', 'world']))
+        self.assertEqual(set(m.keys()), {'hello', 'world'})
         self.assertTrue(np.array_equal(np.ones([2, 3]), m['hello']))
         self.assertTrue(np.array_equal(np.zeros([5, 6]), m['world']))
 
@@ -33,7 +33,7 @@ class TestMask(test_case.TestCase):
         self.assertEqual(len(m), 1)
         self.assertEqual(len(m.keys()), 1)
         self.assertEqual(len(m.values()), 1)
-        self.assertEqual(set(m.keys()), set(['world']))
+        self.assertEqual(set(m.keys()), {'world'})
         self.assertTrue(np.array_equal(np.zeros([5, 6]), m['world']))
 
     def test_create_mask_from_dict(self):
@@ -41,7 +41,7 @@ class TestMask(test_case.TestCase):
         self.assertEqual(len(m), 2)
         self.assertEqual(len(m.keys()), 2)
         self.assertEqual(len(m.values()), 2)
-        self.assertEqual(set(m.keys()), set(['hello', 'world']))
+        self.assertEqual(set(m.keys()), {'hello', 'world'})
         self.assertTrue(np.array_equal(np.ones([2, 3]), m['hello']))
         self.assertTrue(np.array_equal(np.zeros([5, 6]), m['world']))
 
@@ -50,7 +50,7 @@ class TestMask(test_case.TestCase):
         self.assertEqual(len(m), 2)
         self.assertEqual(len(m.keys()), 2)
         self.assertEqual(len(m.values()), 2)
-        self.assertEqual(set(m.keys()), set(['hello', 'world']))
+        self.assertEqual(set(m.keys()), {'hello', 'world'})
         self.assertTrue(np.array_equal(np.ones([2, 3]), m['hello']))
         self.assertTrue(np.array_equal(np.zeros([5, 6]), m['world']))
 
@@ -94,7 +94,7 @@ class TestMask(test_case.TestCase):
         self.assertEqual(len(m2), 2)
         self.assertEqual(len(m2.keys()), 2)
         self.assertEqual(len(m2.values()), 2)
-        self.assertEqual(set(m2.keys()), set(['hello', 'world']))
+        self.assertEqual(set(m2.keys()), {'hello', 'world'})
         self.assertTrue(np.array_equal(np.ones([2, 3]), m2['hello']))
         self.assertTrue(np.array_equal(np.zeros([5, 6]), m2['world']))
 

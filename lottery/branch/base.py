@@ -150,7 +150,7 @@ class Branch(Runner):
                 if parameter.default != inspect._empty: fields.append((arg_name, t, field(default=parameter.default)))
                 else: fields.append((arg_name, t))
             else:
-                raise ValueError('Invalid branch type: {}'.format(parameter.annotation))
+                raise ValueError(f'Invalid branch type: {parameter.annotation}')
 
         fields += [('_name', str, 'Branch Arguments'), ('_description', str, 'Arguments specific to the branch.')]
         setattr(cls, 'BranchHparams', make_dataclass('BranchHparams', fields, bases=(Hparams,)))

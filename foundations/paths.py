@@ -18,7 +18,8 @@ def mask(root): return os.path.join(root, 'mask.pth')
 def sparsity_report(root): return os.path.join(root, 'sparsity_report.json')
 
 
-def model(root, step): return os.path.join(root, 'model_ep{}_it{}.pth'.format(step.ep, step.it))
+def model(root, step):
+    return os.path.join(root, f'model_ep{step.ep}_it{step.it}.pth')
 
 
 def hparams(root): return os.path.join(root, 'hparams.log')

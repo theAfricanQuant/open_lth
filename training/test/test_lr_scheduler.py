@@ -78,7 +78,7 @@ class TestLrScheduler(test_case.TestCase):
                 self.assertLrEquals(i / 20 * 0.1)
                 lrs.step()
             self.assertLrEquals(0.1)
-            for i in range(100):
+            for _ in range(100):
                 lrs.step()
                 self.assertLrEquals(0.1)
 

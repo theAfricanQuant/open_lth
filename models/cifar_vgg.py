@@ -58,15 +58,17 @@ class Model(base.Model):
 
     @staticmethod
     def is_valid_model_name(model_name):
-        return (model_name.startswith('cifar_vgg_') and
-                len(model_name.split('_')) == 3 and
-                model_name.split('_')[2].isdigit() and
-                int(model_name.split('_')[2]) in [11, 13, 16, 19])
+        return (
+            model_name.startswith('cifar_vgg_')
+            and len(model_name.split('_')) == 3
+            and model_name.split('_')[2].isdigit()
+            and int(model_name.split('_')[2]) in {11, 13, 16, 19}
+        )
 
     @staticmethod
     def get_model_from_name(model_name, initializer, outputs=10):
         if not Model.is_valid_model_name(model_name):
-            raise ValueError('Invalid model name: {}'.format(model_name))
+            raise ValueError(f'Invalid model name: {model_name}')
 
         outputs = outputs or 10
 
@@ -80,7 +82,7 @@ class Model(base.Model):
         elif num == 19:
             plan = [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512]
         else:
-            raise ValueError('Unknown VGG model: {}'.format(model_name))
+            raise ValueError(f'Unknown VGG model: {model_name}')
 
         return Model(plan, initializer, outputs)
 

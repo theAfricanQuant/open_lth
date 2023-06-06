@@ -50,7 +50,9 @@ def shuffle_tensor(tensor: torch.Tensor, seed: int = None):
 def shuffle_state_dict(state_dict: typing.Dict[str, torch.Tensor], seed: int = None):
     """Randomly shuffle each of the tensors in a state_dict."""
 
-    output = {}
-    for i, k in enumerate(sorted(state_dict.keys())):
-        output[k] = shuffle_tensor(state_dict[k], seed=None if seed is None else seed+i)
-    return output
+    return {
+        k: shuffle_tensor(
+            state_dict[k], seed=None if seed is None else seed + i
+        )
+        for i, k in enumerate(sorted(state_dict.keys()))
+    }

@@ -20,13 +20,14 @@ class PrunedModel(Model):
         self.model = model
 
         for k in self.model.prunable_layer_names:
-            if k not in mask: raise ValueError('Missing mask value {}.'.format(k))
+            if k not in mask:
+                raise ValueError(f'Missing mask value {k}.')
             if not np.array_equal(mask[k].shape, np.array(self.model.state_dict()[k].shape)):
-                raise ValueError('Incorrect mask shape {} for tensor {}.'.format(mask[k].shape, k))
+                raise ValueError(f'Incorrect mask shape {mask[k].shape} for tensor {k}.')
 
         for k in mask:
             if k not in self.model.prunable_layer_names:
-                raise ValueError('Key {} found in mask but is not a valid model tensor.'.format(k))
+                raise ValueError(f'Key {k} found in mask but is not a valid model tensor.')
 
         for k, v in mask.items(): self.register_buffer(PrunedModel.to_mask_name(k), v.float())
         self._apply_mask()

@@ -19,7 +19,7 @@ class Step:
 
     @staticmethod
     def str_is_zero(s: str):
-        return s in ['0ep', '0it', '0ep0it']
+        return s in {'0ep', '0it', '0ep0it'}
 
     @staticmethod
     def from_iteration(iteration: int, iterations_per_epoch: int) -> 'Step':
@@ -40,18 +40,21 @@ class Step:
         if 'ep' in s and 'it' in s:
             ep = int(s.split('ep')[0])
             it = int(s.split('ep')[1].split('it')[0])
-            if s != '{}ep{}it'.format(ep, it): raise ValueError('Malformed string step: {}'.format(s))
+            if s != f'{ep}ep{it}it':
+                raise ValueError(f'Malformed string step: {s}')
             return Step.from_epoch(ep, it, iterations_per_epoch)
         elif 'ep' in s:
             ep = int(s.split('ep')[0])
-            if s != '{}ep'.format(ep): raise ValueError('Malformed string step: {}'.format(s))
+            if s != f'{ep}ep':
+                raise ValueError(f'Malformed string step: {s}')
             return Step.from_epoch(ep, 0, iterations_per_epoch)
         elif 'it' in s:
             it = int(s.split('it')[0])
-            if s != '{}it'.format(it): raise ValueError('Malformed string step: {}'.format(s))
+            if s != f'{it}it':
+                raise ValueError(f'Malformed string step: {s}')
             return Step.from_iteration(it, iterations_per_epoch)
         else:
-            raise ValueError('Malformed string step: {}'.format(s))
+            raise ValueError(f'Malformed string step: {s}')
 
     @staticmethod
     def zero(iterations_per_epoch: int) -> 'Step':
@@ -74,7 +77,7 @@ class Step:
 
     def _check(self, other):
         if not isinstance(other, Step):
-            raise ValueError('Invalid type for other: {}.'.format(type(other)))
+            raise ValueError(f'Invalid type for other: {type(other)}.')
         if self._iterations_per_epoch != other._iterations_per_epoch:
             raise ValueError('Cannot compare steps when epochs are of different lengths.')
 
@@ -103,4 +106,4 @@ class Step:
         return self._iteration >= other._iteration
 
     def __str__(self):
-        return '(Iteration {}; Iterations per Epoch: {})'.format(self._iteration, self._iterations_per_epoch)
+        return f'(Iteration {self._iteration}; Iterations per Epoch: {self._iterations_per_epoch})'

@@ -13,6 +13,6 @@ registered_runners = {'train': TrainingRunner, 'lottery': LotteryRunner, 'lotter
 
 def get(runner_name: str) -> Runner:
     if runner_name not in registered_runners:
-        raise ValueError('No such runner: {}'.format(runner_name))
+        raise ValueError(f'No such runner: {runner_name}')
     else:
         return registered_runners[runner_name]

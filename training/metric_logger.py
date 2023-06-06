@@ -16,7 +16,7 @@ class MetricLogger:
         self.log[(name, step.iteration)] = value
 
     def __str__(self):
-        return '\n'.join(['{},{},{}'.format(k[0], k[1], v) for k, v in self.log.items()])
+        return '\n'.join([f'{k[0]},{k[1]},{v}' for k, v in self.log.items()])
 
     @staticmethod
     def create_from_string(as_str):

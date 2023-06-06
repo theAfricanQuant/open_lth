@@ -41,9 +41,14 @@ class Model(abc.ABC, torch.nn.Module):
         By default, only the weights of convolutional and linear layers are prunable.
         """
 
-        return [name + '.weight' for name, module in self.named_modules() if
-                isinstance(module, torch.nn.modules.conv.Conv2d) or
-                isinstance(module, torch.nn.modules.linear.Linear)]
+        return [
+            f'{name}.weight'
+            for name, module in self.named_modules()
+            if isinstance(
+                module,
+                (torch.nn.modules.conv.Conv2d, torch.nn.modules.linear.Linear),
+            )
+        ]
 
     @property
     @abc.abstractmethod

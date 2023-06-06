@@ -51,8 +51,9 @@ class Dataset(abc.ABC, torch.utils.data.Dataset):
         """
 
         if examples.shape[0] != labels.shape[0]:
-            raise ValueError('Different number of examples ({}) and labels ({}).'.format(
-                             examples.shape[0], examples.shape[0]))
+            raise ValueError(
+                f'Different number of examples ({examples.shape[0]}) and labels ({examples.shape[0]}).'
+            )
         self._examples = examples
         self._labels = labels if isinstance(labels, np.ndarray) else labels.numpy()
         self._subsampled = False

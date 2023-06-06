@@ -102,14 +102,22 @@ class LotteryDesc(Desc):
         # Handle pretraining.
         if args.pretrain and not Step.str_is_zero(args.pretrain_training_steps):
             desc.pretrain_dataset_hparams = hparams.DatasetHparams.create_from_args(args, prefix='pretrain')
-            desc.pretrain_dataset_hparams._name = 'Pretraining ' + desc.pretrain_dataset_hparams._name
+            desc.pretrain_dataset_hparams._name = (
+                f'Pretraining {desc.pretrain_dataset_hparams._name}'
+            )
             desc.pretrain_training_hparams = hparams.TrainingHparams.create_from_args(args, prefix='pretrain')
-            desc.pretrain_training_hparams._name = 'Pretraining ' + desc.pretrain_training_hparams._name
+            desc.pretrain_training_hparams._name = (
+                f'Pretraining {desc.pretrain_training_hparams._name}'
+            )
         elif 'rewinding_steps' in args and args.rewinding_steps and not Step.str_is_zero(args.rewinding_steps):
             desc.pretrain_dataset_hparams = copy.deepcopy(dataset_hparams)
-            desc.pretrain_dataset_hparams._name = 'Pretraining ' + desc.pretrain_dataset_hparams._name
+            desc.pretrain_dataset_hparams._name = (
+                f'Pretraining {desc.pretrain_dataset_hparams._name}'
+            )
             desc.pretrain_training_hparams = copy.deepcopy(training_hparams)
-            desc.pretrain_training_hparams._name = 'Pretraining ' + desc.pretrain_training_hparams._name
+            desc.pretrain_training_hparams._name = (
+                f'Pretraining {desc.pretrain_training_hparams._name}'
+            )
             desc.pretrain_training_hparams.training_steps = args.rewinding_steps
 
         return desc
@@ -144,7 +152,7 @@ class LotteryDesc(Desc):
         """The location where any run is stored."""
 
         if not isinstance(replicate, int) or replicate <= 0:
-            raise ValueError('Bad replicate: {}'.format(replicate))
+            raise ValueError(f'Bad replicate: {replicate}')
 
         return os.path.join(get_platform().root, self.hashname,
                             f'replicate_{replicate}', f'level_{pruning_level}', experiment)

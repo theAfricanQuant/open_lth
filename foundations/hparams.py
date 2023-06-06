@@ -44,16 +44,20 @@ class Hparams(abc.ABC):
             if field.type == bool:
                 if (defaults and getattr(defaults, field.name) is not False) or field.default is not False:
                     raise ValueError(f'Boolean hyperparameters must default to False: {field.name}.')
-                parser.add_argument(arg_name, action='store_true', help='(optional) ' + helptext)
+                parser.add_argument(
+                    arg_name, action='store_true', help=f'(optional) {helptext}'
+                )
 
             elif field.type in [str, float, int]:
                 required = field.default is MISSING and (not defaults or not getattr(defaults, field.name))
-                if required:  helptext = '(required: %(type)s) ' + helptext
-                elif default: helptext = f'(default: {default}) ' + helptext
-                else:         helptext = '(optional: %(type)s) ' + helptext
+                if required:
+                    helptext = f'(required: %(type)s) {helptext}'
+                elif default:
+                    helptext = f'(default: {default}) {helptext}'
+                else:else
+                    helptext = f'(optional: %(type)s) {helptext}'
                 parser.add_argument(arg_name, type=field.type, default=default, required=required, help=helptext)
 
-            # If it is a nested hparams, use the field name as the prefix and add all arguments.
             elif isinstance(field.type, type) and issubclass(field.type, Hparams):
                 subprefix = f'{prefix}_{field.name}' if prefix else field.name
                 field.type.add_args(parser, defaults=default, prefix=subprefix, create_group=False)
@@ -94,7 +98,8 @@ class Hparams(abc.ABC):
             if f.name.startswith('_'): continue
             if f.default is MISSING or (getattr(self, f.name) != f.default):
                 value = getattr(self, f.name)
-                if isinstance(value, str): value = "'" + value + "'"
+                if isinstance(value, str):
+                    value = f"'{value}'"
                 if isinstance(value, Hparams): value = str(value)
                 if isinstance(value, Tuple): value = 'Tuple(' + ','.join(str(h) for h in value) + ')'
                 fs[f.name] = value

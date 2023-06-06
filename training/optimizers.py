@@ -28,7 +28,7 @@ def get_optimizer(training_hparams: TrainingHparams, model: Model) -> torch.opti
             weight_decay=training_hparams.weight_decay or 0
         )
 
-    raise ValueError('No such optimizer: {}'.format(training_hparams.optimizer_name))
+    raise ValueError(f'No such optimizer: {training_hparams.optimizer_name}')
 
 
 def get_lr_schedule(training_hparams: TrainingHparams, optimizer: torch.optim.Optimizer, iterations_per_epoch: int):

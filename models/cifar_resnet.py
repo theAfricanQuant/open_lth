@@ -82,11 +82,13 @@ class Model(base.Model):
 
     @staticmethod
     def is_valid_model_name(model_name):
-        return (model_name.startswith('cifar_resnet_') and
-                5 > len(model_name.split('_')) > 2 and
-                all([x.isdigit() and int(x) > 0 for x in model_name.split('_')[2:]]) and
-                (int(model_name.split('_')[2]) - 2) % 6 == 0 and
-                int(model_name.split('_')[2]) > 2)
+        return (
+            model_name.startswith('cifar_resnet_')
+            and 5 > len(model_name.split('_')) > 2
+            and all(x.isdigit() and int(x) > 0 for x in model_name.split('_')[2:])
+            and (int(model_name.split('_')[2]) - 2) % 6 == 0
+            and int(model_name.split('_')[2]) > 2
+        )
 
     @staticmethod
     def get_model_from_name(model_name, initializer,  outputs=10):
@@ -109,13 +111,13 @@ class Model(base.Model):
         """
 
         if not Model.is_valid_model_name(model_name):
-            raise ValueError('Invalid model name: {}'.format(model_name))
+            raise ValueError(f'Invalid model name: {model_name}')
 
         name = model_name.split('_')
         W = 16 if len(name) == 3 else int(name[3])
         D = int(name[2])
         if (D - 2) % 3 != 0:
-            raise ValueError('Invalid ResNet depth: {}'.format(D))
+            raise ValueError(f'Invalid ResNet depth: {D}')
         D = (D - 2) // 6
         plan = [(W, D), (2*W, D), (4*W, D)]
 

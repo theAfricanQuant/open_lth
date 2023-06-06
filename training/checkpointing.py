@@ -32,7 +32,9 @@ def restore_checkpoint(output_location, model, optimizer, iterations_per_epoch):
     # Handle DataParallel.
     module_in_name = get_platform().is_parallel
     if module_in_name and not all(k.startswith('module.') for k in checkpoint['model_state_dict']):
-        checkpoint['model_state_dict'] = {'module.' + k: v for k, v in checkpoint['model_state_dict'].items()}
+        checkpoint['model_state_dict'] = {
+            f'module.{k}': v for k, v in checkpoint['model_state_dict'].items()
+        }
     elif all(k.startswith('module.') for k in checkpoint['model_state_dict']) and not module_in_name:
         checkpoint['model_state_dict'] = {k[len('module.'):]: v for k, v in checkpoint['model_state_dict'].items()}
 

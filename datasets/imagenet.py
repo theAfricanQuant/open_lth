@@ -16,8 +16,11 @@ from platforms.platform import get_platform
 def _get_samples(root, y_name, y_num):
     y_dir = os.path.join(root, y_name)
     if not get_platform().isdir(y_dir): return []
-    output = [(os.path.join(y_dir, f), y_num) for f in get_platform().listdir(y_dir) if f.lower().endswith('jpeg')]
-    return output
+    return [
+        (os.path.join(y_dir, f), y_num)
+        for f in get_platform().listdir(y_dir)
+        if f.lower().endswith('jpeg')
+    ]
 
 
 class Dataset(base.ImageDataset):

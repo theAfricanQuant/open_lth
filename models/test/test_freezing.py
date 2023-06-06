@@ -18,7 +18,7 @@ class TestFreezing(test_case.TestCase):
         bn_names = []
         for k, v in model.named_modules():
             if isinstance(v, torch.nn.BatchNorm2d):
-                bn_names += [k + '.weight', k + '.bias']
+                bn_names += [f'{k}.weight', f'{k}.bias']
 
         for k, v in model.named_parameters():
             with self.subTest(tensor=k):
@@ -47,7 +47,7 @@ class TestFreezing(test_case.TestCase):
         enabled_names = []
         for k, v in model.named_modules():
             if isinstance(v, torch.nn.BatchNorm2d):
-                enabled_names += [k + '.weight', k + '.bias']
+                enabled_names += [f'{k}.weight', f'{k}.bias']
         enabled_names += model.output_layer_names
 
         for k, v in model.named_parameters():

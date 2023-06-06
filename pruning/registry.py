@@ -23,6 +23,6 @@ def get_pruning_hparams(pruning_strategy: str) -> type:
     """Get a complete lottery schema as specialized for a particular pruning strategy."""
 
     if pruning_strategy not in registered_strategies:
-        raise ValueError('Pruning strategy {} not found.'.format(pruning_strategy))
+        raise ValueError(f'Pruning strategy {pruning_strategy} not found.')
 
     return registered_strategies[pruning_strategy].get_pruning_hparams()

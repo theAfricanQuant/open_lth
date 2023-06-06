@@ -12,10 +12,7 @@ from testing import test_case
 
 class TestCifarVGG(test_case.TestCase):
     def count_parameters(self, model):
-        total = 0
-        for _, v in model.named_parameters():
-            total += np.product(list(v.shape))
-        return total
+        return sum(np.product(list(v.shape)) for _, v in model.named_parameters())
 
     def test_valid_names(self):
         self.assertFalse(cifar_vgg.Model.is_valid_model_name('vgg'))

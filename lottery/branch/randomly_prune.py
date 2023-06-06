@@ -21,11 +21,7 @@ class Branch(base.Branch):
 
         # Randomize while keeping the same layerwise proportions as the original mask.
         if strategy == 'layerwise': mask = Mask(shuffle_state_dict(mask, seed=seed))
-
-        # Randomize globally throughout all prunable layers.
         elif strategy == 'global': mask = Mask(unvectorize(shuffle_tensor(vectorize(mask), seed=seed), mask))
-
-        # Randomize evenly across all layers.
         elif strategy == 'even':
             sparsity = mask.sparsity
             for i, k in sorted(mask.keys()):
@@ -33,11 +29,7 @@ class Branch(base.Branch):
                                          torch.ones_like(mask[k].size), torch.zeros_like(mask[k].size))
                 mask[k] = shuffle_tensor(layer_mask, seed=seed+i).reshape(mask[k].size)
 
-        # Identity.
-        elif strategy == 'identity': pass
-
-        # Error.
-        else: raise ValueError(f'Invalid strategy: {strategy}')
+        elif strategy != 'identity': raise ValueError(f'Invalid strategy: {strategy}')
 
         # Reset the masks of any layers that shouldn't be pruned.
         if layers_to_ignore:

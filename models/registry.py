@@ -47,7 +47,7 @@ def get(model_hparams: ModelHparams, outputs=None):
     bn_names = []
     for k, v in model.named_modules():
         if isinstance(v, torch.nn.BatchNorm2d):
-            bn_names += [k + '.weight', k + '.bias']
+            bn_names += [f'{k}.weight', f'{k}.bias']
 
     if model_hparams.others_frozen_exceptions:
         others_exception_names = model_hparams.others_frozen_exceptions.split(',')
@@ -89,4 +89,4 @@ def get_default_hparams(model_name):
             params.model_hparams.model_name = model_name
             return params
 
-    raise ValueError('No such model: {}'.format(model_name))
+    raise ValueError(f'No such model: {model_name}')

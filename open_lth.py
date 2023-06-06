@@ -18,7 +18,7 @@ def main():
     # Choose an initial command.
     helptext = welcome + "\nChoose a command to run:"
     for name, runner in runner_registry.registered_runners.items():
-        helptext += "\n    * {} {} [...] => {}".format(sys.argv[0], name, runner.description())
+        helptext += f"\n    * {sys.argv[0]} {name} [...] => {runner.description()}"
     helptext += '\n' + '='*82
 
     runner_name = arg_utils.maybe_get_arg('subcommand', positional=True)
@@ -28,7 +28,7 @@ def main():
 
     # Add the arguments for that command.
     usage = '\n' + welcome + '\n'
-    usage += 'open_lth.py {} [...] => {}'.format(runner_name, runner_registry.get(runner_name).description())
+    usage += f'open_lth.py {runner_name} [...] => {runner_registry.get(runner_name).description()}'
     usage += '\n' + '='*82 + '\n'
 
     parser = argparse.ArgumentParser(usage=usage, conflict_handler='resolve')

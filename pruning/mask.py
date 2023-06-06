@@ -20,11 +20,11 @@ class Mask(dict):
 
     def __setitem__(self, key, value):
         if not isinstance(key, str) or len(key) == 0:
-            raise ValueError('Invalid tensor name: {}'.format(key))
+            raise ValueError(f'Invalid tensor name: {key}')
         if isinstance(value, np.ndarray):
             value = torch.as_tensor(value)
         if not isinstance(value, torch.Tensor):
-            raise ValueError('value for key {} must be torch Tensor or numpy ndarray.'.format(key))
+            raise ValueError(f'value for key {key} must be torch Tensor or numpy ndarray.')
         if ((value != 0) & (value != 1)).any(): raise ValueError('All entries must be 0 or 1.')
 
         super(Mask, self).__setitem__(key, value)
@@ -50,7 +50,7 @@ class Mask(dict):
     @staticmethod
     def load(output_location):
         if not Mask.exists(output_location):
-            raise ValueError('Mask not found at {}'.format(output_location))
+            raise ValueError(f'Mask not found at {output_location}')
         return Mask(get_platform().load_model(paths.mask(output_location)))
 
     @staticmethod

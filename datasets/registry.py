@@ -17,16 +17,19 @@ def get(dataset_hparams: DatasetHparams, train: bool = True):
 
     seed = dataset_hparams.transformation_seed or 0
 
-    # Get the dataset itself.
-    if dataset_hparams.dataset_name in registered_datasets:
-        use_augmentation = train and not dataset_hparams.do_not_augment
-        if train:
-            dataset = registered_datasets[dataset_hparams.dataset_name].Dataset.get_train_set(use_augmentation)
-        else:
-            dataset = registered_datasets[dataset_hparams.dataset_name].Dataset.get_test_set()
-    else:
-        raise ValueError('No such dataset: {}'.format(dataset_hparams.dataset_name))
+    if dataset_hparams.dataset_name not in registered_datasets:
+        raise ValueError(f'No such dataset: {dataset_hparams.dataset_name}')
 
+    use_augmentation = train and not dataset_hparams.do_not_augment
+    dataset = (
+        registered_datasets[
+            dataset_hparams.dataset_name
+        ].Dataset.get_train_set(use_augmentation)
+        if train
+        else registered_datasets[
+            dataset_hparams.dataset_name
+        ].Dataset.get_test_set()
+    )
     # Transform the dataset.
     if train and dataset_hparams.random_labels_fraction is not None:
         dataset.randomize_labels(seed=seed, fraction=dataset_hparams.random_labels_fraction)
@@ -35,14 +38,16 @@ def get(dataset_hparams: DatasetHparams, train: bool = True):
         dataset.subsample(seed=seed, fraction=dataset_hparams.subsample_fraction)
 
     if train and dataset_hparams.blur_factor is not None:
-        if not isinstance(dataset, base.ImageDataset):
-            raise ValueError('Can blur images.')
-        else:
+        if isinstance(dataset, base.ImageDataset):
             dataset.blur(seed=seed, blur_factor=dataset_hparams.blur_factor)
 
+        else:
+            raise ValueError('Can blur images.')
     if dataset_hparams.unsupervised_labels is not None:
         if dataset_hparams.unsupervised_labels != 'rotation':
-            raise ValueError('Unknown unsupervised labels: {}'.format(dataset_hparams.unsupervised_labels))
+            raise ValueError(
+                f'Unknown unsupervised labels: {dataset_hparams.unsupervised_labels}'
+            )
         elif not isinstance(dataset, base.ImageDataset):
             raise ValueError('Can only do unsupervised rotation to images.')
         else:
@@ -59,7 +64,7 @@ def iterations_per_epoch(dataset_hparams: DatasetHparams):
     if dataset_hparams.dataset_name in registered_datasets:
         num_train_examples = registered_datasets[dataset_hparams.dataset_name].Dataset.num_train_examples()
     else:
-        raise ValueError('No such dataset: {}'.format(dataset_hparams.dataset_name))
+        raise ValueError(f'No such dataset: {dataset_hparams.dataset_name}')
 
     if dataset_hparams.subsample_fraction is not None:
         num_train_examples *= dataset_hparams.subsample_fraction
@@ -73,11 +78,13 @@ def num_classes(dataset_hparams: DatasetHparams):
     if dataset_hparams.dataset_name in registered_datasets:
         num_classes = registered_datasets[dataset_hparams.dataset_name].Dataset.num_classes()
     else:
-        raise ValueError('No such dataset: {}'.format(dataset_hparams.dataset_name))
+        raise ValueError(f'No such dataset: {dataset_hparams.dataset_name}')
 
     if dataset_hparams.unsupervised_labels is not None:
         if dataset_hparams.unsupervised_labels != 'rotation':
-            raise ValueError('Unknown unsupervised labels: {}'.format(dataset_hparams.unsupervised_labels))
+            raise ValueError(
+                f'Unknown unsupervised labels: {dataset_hparams.unsupervised_labels}'
+            )
         else:
             return 4
 

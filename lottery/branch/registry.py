@@ -17,6 +17,6 @@ registered_branches = {
 
 def get(branch_name: str) -> Branch:
     if branch_name not in registered_branches:
-        raise ValueError('No such branch: {}'.format(branch_name))
+        raise ValueError(f'No such branch: {branch_name}')
     else:
         return registered_branches[branch_name]

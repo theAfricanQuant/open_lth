@@ -68,10 +68,12 @@ class Model(base.Model):
 
     @staticmethod
     def is_valid_model_name(model_name):
-        return (model_name.startswith('imagenet_resnet_') and
-                4 >= len(model_name.split('_')) >= 3 and
-                model_name.split('_')[2].isdigit() and
-                int(model_name.split('_')[2]) in [18, 34, 50, 101, 152, 200])
+        return (
+            model_name.startswith('imagenet_resnet_')
+            and 4 >= len(model_name.split('_')) >= 3
+            and model_name.split('_')[2].isdigit()
+            and int(model_name.split('_')[2]) in {18, 34, 50, 101, 152, 200}
+        )
 
     @staticmethod
     def get_model_from_name(model_name, initializer,  outputs=1000):
@@ -81,16 +83,23 @@ class Model(base.Model):
         residual layers. By default, this number is 64."""
 
         if not Model.is_valid_model_name(model_name):
-            raise ValueError('Invalid model name: {}'.format(model_name))
+            raise ValueError(f'Invalid model name: {model_name}')
 
         num = int(model_name.split('_')[2])
-        if num == 18: model_fn = partial(ResNet, torchvision.models.resnet.BasicBlock, [2, 2, 2, 2])
-        elif num == 34: model_fn = partial(ResNet, torchvision.models.resnet.BasicBlock, [3, 4, 6, 3])
-        elif num == 50: model_fn = partial(ResNet, torchvision.models.resnet.Bottleneck, [3, 4, 6, 3])
-        elif num == 101: model_fn = partial(ResNet, torchvision.models.resnet.Bottleneck, [3, 4, 23, 3])
-        elif num == 152: model_fn = partial(ResNet, torchvision.models.resnet.Bottleneck, [3, 8, 36, 3])
-        elif num == 200: model_fn = partial(ResNet, torchvision.models.resnet.Bottleneck, [3, 24, 36, 3])
-        elif num == 269: model_fn = partial(ResNet, torchvision.moedls.resnet.Bottleneck, [3, 30, 48, 8])
+        if num == 101:
+            model_fn = partial(ResNet, torchvision.models.resnet.Bottleneck, [3, 4, 23, 3])
+        elif num == 152:
+            model_fn = partial(ResNet, torchvision.models.resnet.Bottleneck, [3, 8, 36, 3])
+        elif num == 18:
+            if num == 18: model_fn = partial(ResNet, torchvision.models.resnet.BasicBlock, [2, 2, 2, 2])
+        elif num == 200:
+            model_fn = partial(ResNet, torchvision.models.resnet.Bottleneck, [3, 24, 36, 3])
+        elif num == 269:
+            model_fn = partial(ResNet, torchvision.moedls.resnet.Bottleneck, [3, 30, 48, 8])
+        elif num == 34:
+            model_fn = partial(ResNet, torchvision.models.resnet.BasicBlock, [3, 4, 6, 3])
+        elif num == 50:
+            model_fn = partial(ResNet, torchvision.models.resnet.Bottleneck, [3, 4, 6, 3])
 
         if len(model_name.split('_')) == 4:
             width = int(model_name.split('_')[3])
